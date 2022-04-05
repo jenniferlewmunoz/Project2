@@ -11,8 +11,8 @@
   - do collision-detection
   
 ------------------------------------------------------------------------------------
-	To use:
-	Add this line to the index.html
+  To use:
+  Add this line to the index.html
 
   <script src="p5.timer.js"></script>
 ***********************************************************************************/
@@ -24,6 +24,8 @@ var speed = 20;
 var playerAvatar;
 var selectedIndex = 0;
 
+var girl;
+
 // keycods for W-A-S-D
 const W_KEY = 87;
 const S_KEY = 83;
@@ -31,11 +33,13 @@ const D_KEY = 68;
 const A_KEY = 65;
 
 function preload() {
- 
+
   // Add new avatar animations here
   playerAvatar = new Avatar("Player", 100, 150, 'assets/run1.png', 'assets/run2.png');
   playerAvatar.setMaxSpeed(5);
   playerAvatar.addStandingAnimation('assets/standing1.png', 'assets/standing2.png')
+  girl = new Avatar("Girl", 200, 200, 'assets/girl01.png', 'assets/girl08.png');
+  girl.setMaxSpeed(5);
 }
 
 // Setup code goes here
@@ -43,7 +47,7 @@ function setup() {
   createCanvas(1000, 800);
 
   frameRate(30);
- }
+}
 
 // Draw code goes here
 function draw() {
@@ -57,11 +61,12 @@ function draw() {
   drawSprites();
 
   playerAvatar.update();
+  girl.update();
 }
 
 // This will reset position
 function keyPressed() {
-  if( key === ' ') {
+  if (key === ' ') {
     // we could do something here with the keyboard
   }
 }
@@ -72,26 +77,27 @@ function checkMovement() {
   var ySpeed = 0;
 
   // Check x movement
-  if(keyIsDown(RIGHT_ARROW) || keyIsDown(D_KEY)) {
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(D_KEY)) {
     xSpeed = speed;
   }
-  else if(keyIsDown(LEFT_ARROW) || keyIsDown(A_KEY)) {
+  else if (keyIsDown(LEFT_ARROW) || keyIsDown(A_KEY)) {
     xSpeed = -speed;
   }
-  
+
   // Check y movement
-  if(keyIsDown(DOWN_ARROW) || keyIsDown(S_KEY)) {
+  if (keyIsDown(DOWN_ARROW) || keyIsDown(S_KEY)) {
     ySpeed = speed;
   }
-  else if(keyIsDown(UP_ARROW) || keyIsDown(W_KEY)) {
+  else if (keyIsDown(UP_ARROW) || keyIsDown(W_KEY)) {
     ySpeed = -speed;
   }
 
-  playerAvatar.setSpeed(xSpeed,ySpeed);
+  playerAvatar.setSpeed(xSpeed, ySpeed);
+  girl.setSpeed(xSpeed, ySpeed);
 }
 
 // Animated character
-class Avatar  {
+class Avatar {
   // gets called with new keyword
   constructor(name, x, y, startPNGPath, endPNGPath) {
     this.name = name;
@@ -100,13 +106,13 @@ class Avatar  {
     this.maxSpeed = 6;
     this.hasStandingAnimation = false;
     this.currentAnimation = 'walking';
-    
+
     //console.log(this);
     // no grabables
     this.grabbable = undefined;
 
     // make avatar still
-    this.setSpeed(0,0);
+    this.setSpeed(0, 0);
   }
 
   // adds a standing animation (optional)
@@ -120,9 +126,9 @@ class Avatar  {
   }
 
   // set current speed, flip sprite, constain to max
-  setSpeed(xSpeed,ySpeed) {
+  setSpeed(xSpeed, ySpeed) {
     // flip sprite depending on direction
-    if( xSpeed > 0 ) {
+    if (xSpeed > 0) {
       this.sprite.mirrorX(-1);
     }
     else {
@@ -130,18 +136,18 @@ class Avatar  {
     }
 
     this.sprite.changeAnimation('standing');
-    
+
     // may need to optimize this
-    if( xSpeed === 0 && ySpeed === 0 && this.hasStandingAnimation === true ) {
+    if (xSpeed === 0 && ySpeed === 0 && this.hasStandingAnimation === true) {
       this.sprite.changeAnimation('standing');
     }
     else {
       this.sprite.changeAnimation('walking');
     }
-    
+
     // set to xSpeed and constrain to max speed
-    this.sprite.velocity.x = constrain(xSpeed, -this.maxSpeed, this.maxSpeed );
-    this.sprite.velocity.y = constrain(ySpeed, -this.maxSpeed, this.maxSpeed );
+    this.sprite.velocity.x = constrain(xSpeed, -this.maxSpeed, this.maxSpeed);
+    this.sprite.velocity.y = constrain(ySpeed, -this.maxSpeed, this.maxSpeed);
   }
 
   // accessor function to give avatar a grabbable
@@ -152,7 +158,7 @@ class Avatar  {
   // if avatar has a grabble, update the position of that grabbable
   // call every draw loop
   update() {
-    if( this.grabbable !== undefined ) {
+    if (this.grabbable !== undefined) {
       this.grabbable.sprite.position.x = this.sprite.position.x + 10;
       this.grabbable.sprite.position.y = this.sprite.position.y + 10;
     }
@@ -175,6 +181,6 @@ class Grabbable {
   }
 
   setup() {
-    this.sprite.addImage('static', this.img );
+    this.sprite.addImage('static', this.img);
   }
 }
