@@ -5,8 +5,8 @@
   Uses the p5.2DAdventure.js class 
   
 ------------------------------------------------------------------------------------
-	To use:
-	Add this line to the index.html
+  To use:
+  Add this line to the index.html
 
   <script src="p5.2DAdventure.js"></script>
 ***********************************************************************************/
@@ -56,13 +56,13 @@ function setup() {
 
   // MODIFY THIS: change to initial position
   playerAvatar = new Avatar("Player", 640, 400);
-   
+
   // MODIFY THIS: to make your avatar go faster or slower
   playerAvatar.setMaxSpeed(20);
 
   // MODIFY THIS: add your filenames here, right now our moving animation and standing animation are the same
-  playerAvatar.addMovingAnimation( 'assets/blueblob-01.png', 'assets/blueblob-05.png');
-  playerAvatar.addStandingAnimation('assets/blueblob-01.png', 'assets/blueblob-05.png');
+  playerAvatar.addMovingAnimation('assets/female_running01.png', 'assets/female_running03.png');
+  playerAvatar.addStandingAnimation('assets/female_standing01.png', 'assets/female_standing02.png');
 
   //--- TEMPLATE STUFF: Don't change
   // use this to track movement from toom to room in adventureManager.draw()
@@ -72,12 +72,12 @@ function setup() {
   // based on the state name in the clickableLayout
   adventureManager.setClickableManager(clickablesManager);
 
-    // This will load the images, go through state and interation tables, etc
+  // This will load the images, go through state and interation tables, etc
   adventureManager.setup();
 
   // call OUR function to setup additional information about the p5.clickables
   // that are not in the array 
-  setupClickables(); 
+  setupClickables();
   //--
 }
 
@@ -93,9 +93,9 @@ function draw() {
 
   //--- MODIFY THESE CONDITONALS
   // No avatar for Splash screen or Instructions screen
-  if( adventureManager.getStateName() !== "Splash" && 
-      adventureManager.getStateName() !== "Instructions" ) {
-      
+  if (adventureManager.getStateName() !== "Splash" &&
+    adventureManager.getStateName() !== "Instructions") {
+
     //--- TEMPLATE STUFF: Don't change    
     // responds to keydowns
     checkMovement();
@@ -103,7 +103,7 @@ function draw() {
     // this is a function of p5.play, not of this sketch
     drawSprite(playerAvatar.sprite);
     //--
-  } 
+  }
 }
 
 //--- TEMPLATE STUFF: Don't change 
@@ -113,29 +113,29 @@ function checkMovement() {
   var ySpeed = 0;
 
   // Check x movement
-  if(keyIsDown(RIGHT_ARROW) || keyIsDown(D_KEY)) {
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(D_KEY)) {
     xSpeed = speed;
   }
-  else if(keyIsDown(LEFT_ARROW) || keyIsDown(A_KEY)) {
+  else if (keyIsDown(LEFT_ARROW) || keyIsDown(A_KEY)) {
     xSpeed = -speed;
   }
-  
+
   // Check y movement
-  if(keyIsDown(DOWN_ARROW) || keyIsDown(S_KEY)) {
+  if (keyIsDown(DOWN_ARROW) || keyIsDown(S_KEY)) {
     ySpeed = speed;
   }
-  else if(keyIsDown(UP_ARROW) || keyIsDown(W_KEY)) {
+  else if (keyIsDown(UP_ARROW) || keyIsDown(W_KEY)) {
     ySpeed = -speed;
   }
 
-  playerAvatar.setSpeed(xSpeed,ySpeed);
+  playerAvatar.setSpeed(xSpeed, ySpeed);
 }
 //--
 
 //-- MODIFY THIS: this is an example of how I structured my code. You may
 // want to do it differently
 function mouseReleased() {
-  if( adventureManager.getStateName() === "Splash") {
+  if (adventureManager.getStateName() === "Splash") {
     adventureManager.changeState("Instructions");
   }
 }
@@ -146,7 +146,7 @@ function mouseReleased() {
 //--- TEMPLATE STUFF: Don't change 
 function setupClickables() {
   // All clickables to have same effects
-  for( let i = 0; i < clickables.length; i++ ) {
+  for (let i = 0; i < clickables.length; i++) {
     clickables[i].onHover = clickableButtonHover;
     clickables[i].onOutside = clickableButtonOnOutside;
     clickables[i].onPress = clickableButtonPressed;
@@ -170,10 +170,10 @@ clickableButtonOnOutside = function () {
 }
 
 //--- TEMPLATE STUFF: Don't change 
-clickableButtonPressed = function() {
+clickableButtonPressed = function () {
   // these clickables are ones that change your state
   // so they route to the adventure manager to do this
-  adventureManager.clickablePressed(this.name); 
+  adventureManager.clickablePressed(this.name);
 }
 //
 
@@ -193,8 +193,8 @@ class InstructionsScreen extends PNGRoom {
   // AdventureManager calls preload() one time, during startup
   preload() {
     // These are out variables in the InstructionsScreen class
-    this.textBoxWidth = (width/6)*4;
-    this.textBoxHeight = (height/6)*4; 
+    this.textBoxWidth = (width / 6) * 4;
+    this.textBoxHeight = (height / 6) * 4;
 
     // hard-coded, but this could be loaded from a file if we wanted to be more elegant
     this.instructionsText = "You are navigating through the interior space of your moods. There is no goal to this game, but just a chance to explore various things that might be going on in your head. Use the ARROW keys to navigate your avatar around.";
@@ -205,17 +205,17 @@ class InstructionsScreen extends PNGRoom {
   draw() {
     // tint down background image so text is more readable
     tint(128);
-      
+
     // this calls PNGRoom.draw()
     super.draw();
-      
+
     // text draw settings
     fill(255);
     textAlign(CENTER);
     textSize(30);
 
     // Draw text in a box
-    text(this.instructionsText, width/6, height/6, this.textBoxWidth, this.textBoxHeight );
+    text(this.instructionsText, width / 6, height / 6, this.textBoxWidth, this.textBoxHeight);
   }
 }
 
