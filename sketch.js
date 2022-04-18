@@ -29,56 +29,44 @@ const S_KEY = 83;
 const D_KEY = 68;
 const A_KEY = 65;
 
-//---
+var speed = 7;
 
-//-- MODIFY THIS for different speeds
-var speed = 10;
-
-//--- Your globals would go here
-
+// fonts
+var din_condensed;
 
 // Allocate Adventure Manager with states table and interaction tables
 function preload() {
-  //--- TEMPLATE STUFF: Don't change
   clickablesManager = new ClickableManager('data/clickableLayout.csv');
   adventureManager = new AdventureManager('data/adventureStates.csv', 'data/interactionTable.csv', 'data/clickableLayout.csv');
-  //---
+
+  din_condensed = loadFont("fonts/DinCondensed.ttf");
 }
 
 // Setup the adventure manager
 function setup() {
   createCanvas(1280, 720);
 
-  //--- TEMPLATE STUFF: Don't change
-  // setup the clickables = this will allocate the array
+  // setup the clickables
   clickables = clickablesManager.setup();
-  //---
 
-  // MODIFY THIS: change to initial position
+  // avatar set up
   playerAvatar = new Avatar("Player", 640, 400);
-
-  // MODIFY THIS: to make your avatar go faster or slower
   playerAvatar.setMaxSpeed(20);
-
-  // MODIFY THIS: add your filenames here, right now our moving animation and standing animation are the same
   playerAvatar.addMovingAnimation('assets/female_running01.png', 'assets/female_running03.png');
   playerAvatar.addStandingAnimation('assets/female_standing01.png', 'assets/female_standing02.png');
 
-  //--- TEMPLATE STUFF: Don't change
   // use this to track movement from toom to room in adventureManager.draw()
   adventureManager.setPlayerSprite(playerAvatar.sprite);
 
-  // this is optional but will manage turning visibility of buttons on/off
-  // based on the state name in the clickableLayout
+  // manage turning visibility of buttons on/off based on the state name in the clickableLayout
   adventureManager.setClickableManager(clickablesManager);
 
-  // This will load the images, go through state and interation tables, etc
+  // load the images, go through state and interation tables, etc
   adventureManager.setup();
 
   // call OUR function to setup additional information about the p5.clickables
   // that are not in the array 
   setupClickables();
-  //--
 }
 
 // Adventure manager handles it all!
@@ -106,7 +94,6 @@ function draw() {
   }
 }
 
-//--- TEMPLATE STUFF: Don't change 
 // respond to W-A-S-D or the arrow keys
 function checkMovement() {
   var xSpeed = 0;
@@ -147,9 +134,18 @@ function mouseReleased() {
 function setupClickables() {
   // All clickables to have same effects
   for (let i = 0; i < clickables.length; i++) {
+
+    // Callbacks
     clickables[i].onHover = clickableButtonHover;
     clickables[i].onOutside = clickableButtonOnOutside;
     clickables[i].onPress = clickableButtonPressed;
+
+    // Style
+    clickables[i].textFont = din_condensed;
+    clickables[i].textSize = 20;
+    clickables[i].strokeWeight = 5;
+    clickables[i].stroke = "#FFFFFF";
+
   }
 }
 //--
@@ -157,16 +153,16 @@ function setupClickables() {
 //-- MODIFY THIS:
 // tint when mouse is over
 clickableButtonHover = function () {
-  this.color = "#AA33AA";
+  this.color = "#A9A9A9";
   this.noTint = false;
-  this.tint = "#FF0000";
+  this.tint = "#A9A9A9";
 }
 
 //-- MODIFY THIS:
 // color a light gray if off
 clickableButtonOnOutside = function () {
   // backto our gray color
-  this.color = "#AAAAAA";
+  this.color = "#FFFFFF";
 }
 
 //--- TEMPLATE STUFF: Don't change 
@@ -176,8 +172,6 @@ clickableButtonPressed = function () {
   adventureManager.clickablePressed(this.name);
 }
 //
-
-
 
 //-------------- SUBCLASSES / YOUR DRAW CODE CAN GO HERE ---------------//
 
@@ -203,19 +197,10 @@ class InstructionsScreen extends PNGRoom {
   // call the PNGRoom superclass's draw function to draw the background image
   // and draw our instructions on top of this
   draw() {
-    // tint down background image so text is more readable
-    tint(128);
 
     // this calls PNGRoom.draw()
     super.draw();
 
-    // text draw settings
-    fill(255);
-    textAlign(CENTER);
-    textSize(30);
-
-    // Draw text in a box
-    text(this.instructionsText, width / 6, height / 6, this.textBoxWidth, this.textBoxHeight);
   }
 }
 

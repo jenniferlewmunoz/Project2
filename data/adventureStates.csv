@@ -1,7 +1,7 @@
 ID,StateName,ClassName,PNGFilename,CollisionFilename
-0,Splash,PNGRoom,assets/Splash.png,
-1,Instructions,InstructionsScreen,assets/Instructions.png,
-2,Start,PNGRoom,assets/Start.png,
+0,Splash,PNGRoom,assets/hotclock_splash.png,
+1,Instructions,InstructionsScreen,assets/hotclock_intro.png,
+2,Start,PNGRoom,assets/hotclock_park.png,
 3,Determined,PNGRoom,assets/Determined.png,
 4,Calm,PNGRoom,assets/Calm.png,
 5,Sleepy,PNGRoom,assets/Sleepy.png,
