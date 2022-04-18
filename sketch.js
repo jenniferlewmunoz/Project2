@@ -145,7 +145,6 @@ function setupClickables() {
     clickables[i].textSize = 20;
     clickables[i].strokeWeight = 5;
     clickables[i].stroke = "#FFFFFF";
-
   }
 }
 //--
