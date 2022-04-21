@@ -1,7 +1,7 @@
 ID,StateName,ClassName,PNGFilename,CollisionFilename
 0,Splash,PNGRoom,assets/backgrounds/splash.png,
 1,Instructions,InstructionsScreen,assets/backgrounds/intro.png,
-2,Park,PNGRoom,assets/backgrounds/park.png,
+2,Park,PNGRoom,assets/backgrounds/park.png,data/park_cl.csv
 3,Determined,PNGRoom,assets/Determined.png,
 4,Calm,PNGRoom,assets/Calm.png,
 5,Sleepy,PNGRoom,assets/Sleepy.png,

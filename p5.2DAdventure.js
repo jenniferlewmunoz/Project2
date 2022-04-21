@@ -82,10 +82,6 @@ class AdventureManager {
         this.playerSprite = s;
     }
 
-    getPlayerSprite() {
-        return this.playerSprite;
-    }
-
     // clickable manager for turning visibility on/off for buttons based on their states
     setClickableManager(cm) {
         this.clickableArray = cm.getClickableArray();

@@ -26,7 +26,7 @@ const W_KEY = 87;
 const S_KEY = 83;
 const D_KEY = 68;
 const A_KEY = 65;
-var speed = 7;
+var speed = 5;
 
 // fonts
 var din_condensed;
@@ -60,10 +60,10 @@ function preload() {
   din_condensed = loadFont("fonts/DinCondensed.ttf");
 
   // Pre load images for animated character selection
-  animated_girl[0] = loadImage('assets/female_standing01.png');
-  animated_girl[1] = loadImage('assets/female_standing02.png');
-  animated_boy[0] = loadImage('assets/male_standing02.png');
-  animated_boy[1] = loadImage('assets/male_standing01.png');
+  animated_girl[0] = loadImage('assets/people/female_standing01.png');
+  animated_girl[1] = loadImage('assets/people/female_standing02.png');
+  animated_boy[0] = loadImage('assets/people/male_standing02.png');
+  animated_boy[1] = loadImage('assets/people/male_standing01.png');
 
   // Pre load images for grass/trees in the park
   grass[0] = loadImage('assets/grass01.png');
@@ -76,8 +76,8 @@ function preload() {
   trees[2] = loadImage('assets/tree03.png');
 
   // Pre load images for cashier in the store
-  cashier[0] = loadImage('assets/store_associate01.png');
-  cashier[1] = loadImage('assets/store_associate02.png');
+  cashier[0] = loadImage('assets/people/store_associate01.png');
+  cashier[1] = loadImage('assets/people/store_associate02.png');
 
   // Pre load images for trash
   trash.push(new StaticSprite("Bag", 100, 200, 'assets/items/plastic_bag.png'));
@@ -94,6 +94,7 @@ function preload() {
   groceries.push(new StaticSprite("Steak", 1095, 120, 'assets/items/steak.png'));
   groceries.push(new StaticSprite("Tofu", 188, 117, 'assets/items/tofu.png'));
   groceries.push(new StaticSprite("Milk", 350, 117, 'assets/items/milk.png'));
+
 }
 
 // Setup the adventure manager
@@ -106,16 +107,16 @@ function setup() {
   // avatar set up
   playerGirl = new Avatar("Girl", 640, 400);
   playerGirl.setMaxSpeed(20);
-  playerGirl.addMovingAnimation('assets/female_running01.png', 'assets/female_running03.png');
-  playerGirl.addStandingAnimation('assets/female_standing01.png', 'assets/female_standing02.png');
+  playerGirl.addMovingAnimation('assets/people/female_running01.png', 'assets/people/female_running03.png');
+  playerGirl.addStandingAnimation('assets/people/female_standing01.png', 'assets/people/female_standing02.png');
 
   playerBoy = new Avatar("Boy", 700, 400);
   playerBoy.setMaxSpeed(20);
-  playerBoy.addMovingAnimation('assets/male_running01.png', 'assets/male_running03.png');
-  playerBoy.addStandingAnimation('assets/male_standing01.png', 'assets/male_standing02.png');
+  playerBoy.addMovingAnimation('assets/people/male_running01.png', 'assets/people/male_running03.png');
+  playerBoy.addStandingAnimation('assets/people/male_standing01.png', 'assets/people/male_standing02.png');
 
   // use this to track movement from toom to room in adventureManager.draw()
-  adventureManager.setPlayerSprite(playerGirl.sprite);
+  // adventureManager.setPlayerSprite(playerGirl.sprite);
 
   // Set up grabbables
   for (let i = 0; i < trash.length; i++) {
@@ -234,8 +235,8 @@ function draw() {
 
 function notSplashOrInstruct() {
   checkMovement();
-  drawSprite(playerGirl.sprite);
-  playerGirl.update();
+  drawSprite(playerAvatar.sprite);
+  playerAvatar.update();
 }
 
 // respond to W-A-S-D or the arrow keys
@@ -259,7 +260,7 @@ function checkMovement() {
     ySpeed = -speed;
   }
 
-  playerGirl.setSpeed(xSpeed, ySpeed);
+  playerAvatar.setSpeed(xSpeed, ySpeed);
 }
 //--
 
@@ -313,6 +314,15 @@ clickableButtonPressed = function () {
   // these clickables are ones that change your state
   // so they route to the adventure manager to do this
   adventureManager.clickablePressed(this.name);
+  if (this.name == "ChooseFemale") {
+    console.log('female pressed')
+    playerAvatar = playerGirl;
+  } if (this.name == "ChooseMale") {
+    console.log('male pressed')
+    playerAvatar = playerBoy;
+  }
+
+  adventureManager.setPlayerSprite(playerAvatar.sprite);
 
 }
 //
