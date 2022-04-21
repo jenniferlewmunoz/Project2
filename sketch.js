@@ -11,35 +11,72 @@
   <script src="p5.2DAdventure.js"></script>
 ***********************************************************************************/
 
-//--- TEMPLATE STUFF: Don't change
-
 // adventure manager global  
 var adventureManager;
+var clickablesManager;
+var clickables;
 
-// p5.play
+// avatar selction
 var playerAvatar;
-
-// Clickables: the manager class
-var clickablesManager;    // the manager class
-var clickables;           // an array of clickable objects
+var playerGirl;
+var playerBoy;
 
 // keycods for W-A-S-D
 const W_KEY = 87;
 const S_KEY = 83;
 const D_KEY = 68;
 const A_KEY = 65;
-
 var speed = 7;
 
 // fonts
 var din_condensed;
+
+// Variables needed for intro screen
+var timer;
+var animated_girl = [];
+var animated_boy = [];
+var animated_index = 0;
+
+// Grabbable arrays
+var trash = [];
+var groceries = [];
+
+// Cashier in store
+var cashier = [];
+var curr_cashier = 0;
 
 // Allocate Adventure Manager with states table and interaction tables
 function preload() {
   clickablesManager = new ClickableManager('data/clickableLayout.csv');
   adventureManager = new AdventureManager('data/adventureStates.csv', 'data/interactionTable.csv', 'data/clickableLayout.csv');
 
+  // Pre load fonts
   din_condensed = loadFont("fonts/DinCondensed.ttf");
+
+  // Pre load images for animated character selection
+  animated_girl[0] = loadImage('assets/female_standing01.png');
+  animated_girl[1] = loadImage('assets/female_standing02.png');
+  animated_boy[0] = loadImage('assets/male_standing02.png');
+  animated_boy[1] = loadImage('assets/male_standing01.png');
+
+  cashier[0] = loadImage('assets/store_associate01.png');
+  cashier[1] = loadImage('assets/store_associate02.png');
+
+  // Pre load images for trash
+  trash.push(new StaticSprite("Bag", 100, 200, 'assets/items/plastic_bag.png'));
+  trash.push(new StaticSprite("Wrapper", 800, 70, 'assets/items/plastic_wrap.png'));
+  trash.push(new StaticSprite("Straw", 400, 600, 'assets/items/straw.png'));
+  trash.push(new StaticSprite("Bottle", 1180, 650, 'assets/items/water_bottle.png'));
+
+  // Pre load images of groceries
+  groceries.push(new StaticSprite("Apple", 755, 382, 'assets/items/apple.png'));
+  groceries.push(new StaticSprite("Banana", 1000, 380, 'assets/items/banana.png'));
+  groceries.push(new StaticSprite("Broccoli", 1125, 383, 'assets/items/broccoli.png'));
+  groceries.push(new StaticSprite("Bacon", 937, 115, 'assets/items/bacon.png'));
+  groceries.push(new StaticSprite("Chicken", 505, 117, 'assets/items/chicken.png'));
+  groceries.push(new StaticSprite("Steak", 1095, 120, 'assets/items/steak.png'));
+  groceries.push(new StaticSprite("Tofu", 188, 117, 'assets/items/tofu.png'));
+  groceries.push(new StaticSprite("Milk", 350, 117, 'assets/items/milk.png'));
 }
 
 // Setup the adventure manager
@@ -50,13 +87,27 @@ function setup() {
   clickables = clickablesManager.setup();
 
   // avatar set up
-  playerAvatar = new Avatar("Player", 640, 400);
-  playerAvatar.setMaxSpeed(20);
-  playerAvatar.addMovingAnimation('assets/female_running01.png', 'assets/female_running03.png');
-  playerAvatar.addStandingAnimation('assets/female_standing01.png', 'assets/female_standing02.png');
+  playerGirl = new Avatar("Girl", 640, 400);
+  playerGirl.setMaxSpeed(20);
+  playerGirl.addMovingAnimation('assets/female_running01.png', 'assets/female_running03.png');
+  playerGirl.addStandingAnimation('assets/female_standing01.png', 'assets/female_standing02.png');
+
+  playerBoy = new Avatar("Boy", 700, 400);
+  playerBoy.setMaxSpeed(20);
+  playerBoy.addMovingAnimation('assets/male_running01.png', 'assets/male_running03.png');
+  playerBoy.addStandingAnimation('assets/male_standing01.png', 'assets/male_standing02.png');
 
   // use this to track movement from toom to room in adventureManager.draw()
-  adventureManager.setPlayerSprite(playerAvatar.sprite);
+  adventureManager.setPlayerSprite(playerGirl.sprite);
+
+  // Set up grabbables
+  for (let i = 0; i < trash.length; i++) {
+    trash[i].setup();
+  }
+
+  for (let i = 0; i < groceries.length; i++) {
+    groceries[i].setup();
+  }
 
   // manage turning visibility of buttons on/off based on the state name in the clickableLayout
   adventureManager.setClickableManager(clickablesManager);
@@ -67,6 +118,9 @@ function setup() {
   // call OUR function to setup additional information about the p5.clickables
   // that are not in the array 
   setupClickables();
+
+  timer = new Timer(300);
+  timer.start();
 }
 
 // Adventure manager handles it all!
@@ -77,21 +131,60 @@ function draw() {
 
   // draw the p5.clickables, in front of the mazes but behind the sprites 
   clickablesManager.draw();
-  //---
 
-  //--- MODIFY THESE CONDITONALS
-  // No avatar for Splash screen or Instructions screen
-  if (adventureManager.getStateName() !== "Splash" &&
-    adventureManager.getStateName() !== "Instructions") {
+  if (adventureManager.getStateName() == "Instructions") {
+    // Draw animation of girl
+    let img1 = animated_girl[animated_index];
+    img1.resize(160, 300);
+    image(img1, 445, 270);
 
-    //--- TEMPLATE STUFF: Don't change    
-    // responds to keydowns
-    checkMovement();
+    // Draw animation of boy
+    let img2 = animated_boy[animated_index];
+    img2.resize(160, 300);
+    image(img2, 695, 270);
 
-    // this is a function of p5.play, not of this sketch
-    drawSprite(playerAvatar.sprite);
-    //--
+    // Change image
+    if (timer.expired()) {
+      if (animated_index == 0) {
+        animated_index = 1;
+      } else {
+        animated_index = 0;
+      }
+      timer.start();
+    }
+  } else if (adventureManager.getStateName() == "Park") {
+    notSplashOrInstruct();
+    for (let i = 0; i < trash.length; i++) {
+      console.log(trash[i].name);
+      drawSprite(trash[i].sprite);
+    }
+  } else if (adventureManager.getStateName() == "Store") {
+    notSplashOrInstruct();
+    for (let i = 0; i < groceries.length; i++) {
+      if (i < 3) {
+        drawSprite(groceries[i].sprite);
+      }
+      console.log(groceries[i].name);
+      drawSprite(groceries[i].sprite);
+    }
+
+    // Draw store associate
+    image(cashier[curr_cashier], 50, 318);
+    if (timer.expired()) {
+      if (curr_cashier == 0) {
+        curr_cashier = 1;
+      } else {
+        curr_cashier = 0;
+      }
+      timer.start();
+    }
   }
+}
+
+function notSplashOrInstruct() {
+  checkMovement();
+  drawSprite(playerGirl.sprite);
+  playerGirl.update();
 }
 
 // respond to W-A-S-D or the arrow keys
@@ -115,7 +208,7 @@ function checkMovement() {
     ySpeed = -speed;
   }
 
-  playerAvatar.setSpeed(xSpeed, ySpeed);
+  playerGirl.setSpeed(xSpeed, ySpeed);
 }
 //--
 
@@ -169,6 +262,7 @@ clickableButtonPressed = function () {
   // these clickables are ones that change your state
   // so they route to the adventure manager to do this
   adventureManager.clickablePressed(this.name);
+
 }
 //
 
