@@ -41,6 +41,12 @@ var animated_index = 0;
 var trash = [];
 var groceries = [];
 
+// Grass/Trees in the park
+var grass = [];
+var trees = [];
+var curr_grass = 0;
+var curr_tree = 0;
+
 // Cashier in store
 var cashier = [];
 var curr_cashier = 0;
@@ -59,6 +65,17 @@ function preload() {
   animated_boy[0] = loadImage('assets/male_standing02.png');
   animated_boy[1] = loadImage('assets/male_standing01.png');
 
+  // Pre load images for grass/trees in the park
+  grass[0] = loadImage('assets/grass01.png');
+  grass[1] = loadImage('assets/grass02.png');
+  grass[2] = loadImage('assets/grass03.png');
+  grass[3] = loadImage('assets/grass04.png');
+
+  trees[0] = loadImage('assets/tree01.png');
+  trees[1] = loadImage('assets/tree02.png');
+  trees[2] = loadImage('assets/tree03.png');
+
+  // Pre load images for cashier in the store
   cashier[0] = loadImage('assets/store_associate01.png');
   cashier[1] = loadImage('assets/store_associate02.png');
 
@@ -153,12 +170,46 @@ function draw() {
       timer.start();
     }
   } else if (adventureManager.getStateName() == "Park") {
+
+    // Draw sprites
     notSplashOrInstruct();
     for (let i = 0; i < trash.length; i++) {
       console.log(trash[i].name);
       drawSprite(trash[i].sprite);
     }
+
+    // Draw grass
+    let x_grass = [50, 100, 200, 300, 400, 500, 700, 800, 900, 1000, 1100, 1200];
+    let y_grass = [50, 650, 150, 500, 260, 600, 200, 400, 100, 650, 500, 50];
+
+    for (let i = 0; i < x_grass.length; i++) {
+      image(grass[curr_grass], x_grass[i], y_grass[i]);
+    }
+
+    let x_tree = [150, 300, 910, 950];
+    let y_tree = [550, 0, 340, -150];
+
+    let tree = trees[curr_tree];
+    tree.resize(180, 337);
+
+    for (let j = 0; j < x_tree.length; j++) {
+      image(tree, x_tree[j], y_tree[j]);
+    }
+
+    if (timer.expired()) {
+      curr_grass++;
+      curr_tree++;
+      if (curr_grass == 4) {
+        curr_grass = 0;
+      }
+      if (curr_tree == 3) {
+        curr_tree = 0;
+      }
+      timer.start();
+    }
   } else if (adventureManager.getStateName() == "Store") {
+
+    // Draw Sprites
     notSplashOrInstruct();
     for (let i = 0; i < groceries.length; i++) {
       if (i < 3) {
