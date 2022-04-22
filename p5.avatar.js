@@ -12,19 +12,19 @@
     - do collision-detection
   
 ------------------------------------------------------------------------------------
-	To use:
-	Add this line to the index.html
+  To use:
+  Add this line to the index.html
 
   <script src="p5.avatar.js"></script>
 ***********************************************************************************/
 
 // Animated character
-class Avatar  {
+class Avatar {
   // gets called with new keyword
   constructor(name, x, y) {
     this.name = name;
     this.sprite = createSprite(x, y);
-    
+
     this.maxSpeed = 6;
     this.hasStandingAnimation = false;
     this.hasMovingAnimation = false;
@@ -33,11 +33,11 @@ class Avatar  {
     this.grabbable = undefined;
 
     // make avatar still
-    this.setSpeed(0,0);
+    this.setSpeed(0, 0);
   }
 
-   // adds a moving animation (optional)
-   addMovingAnimation(startPNGPath, endPNGPath) {
+  // adds a moving animation (optional)
+  addMovingAnimation(startPNGPath, endPNGPath) {
     this.sprite.addAnimation('walking', startPNGPath, endPNGPath);
     this.hasMovingAnimation = true;
     this.currentAnimation = 'walking';
@@ -49,7 +49,7 @@ class Avatar  {
     this.hasStandingAnimation = true;
   }
 
-  setPosition(x,y) {
+  setPosition(x, y) {
     this.sprite.position.x = x;
     this.sprite.position.y = y;
   }
@@ -61,7 +61,7 @@ class Avatar  {
 
   // return name of current grabble, empty string if none
   getGrabbableName() {
-    if( this.grabbable === undefined ) {
+    if (this.grabbable === undefined) {
       return "";
     }
     else {
@@ -70,40 +70,39 @@ class Avatar  {
   }
 
   // set current speed, flip sprite, constain to max, change animations
-  setSpeed(xSpeed,ySpeed) {
+  setSpeed(xSpeed, ySpeed) {
     // flip sprite depending on direction
-    if( xSpeed > 0 ) {
+    if (xSpeed > 0) {
       this.sprite.mirrorX(-1);
     }
     else {
       this.sprite.mirrorX(1);
     }
 
-    if( this.hasStandingAnimation ) {
+    if (this.hasStandingAnimation) {
       this.sprite.changeAnimation('standing');
     }
 
     // may need to optimize this
-    if( xSpeed === 0 && ySpeed === 0 && this.hasStandingAnimation ) {
+    if (xSpeed === 0 && ySpeed === 0 && this.hasStandingAnimation) {
       this.sprite.changeAnimation('standing');
     }
-    else if( this.hasMovingAnimation ) {
+    else if (this.hasMovingAnimation) {
       this.sprite.changeAnimation('walking');
     }
-    
+
     // set to xSpeed and constrain to max speed
-    this.sprite.velocity.x = constrain(xSpeed, -this.maxSpeed, this.maxSpeed );
-    this.sprite.velocity.y = constrain(ySpeed, -this.maxSpeed, this.maxSpeed );
+    this.sprite.velocity.x = constrain(xSpeed, -this.maxSpeed, this.maxSpeed);
+    this.sprite.velocity.y = constrain(ySpeed, -this.maxSpeed, this.maxSpeed);
   }
 
   // a sprite (or avatar to check overlap with)
   overlap(overlapSprite, callback) {
-    if( overlapSprite === undefined ) {
-      console.log("early return");
+    if (overlapSprite === undefined) {
       return;
     }
 
-   this.overlap(overlapSprite.sprite, callback );
+    this.overlap(overlapSprite.sprite, callback);
   }
 
   // accessor function to give avatar a grabbable
@@ -119,7 +118,7 @@ class Avatar  {
   // if avatar has a grabble, update the position of that grabbable
   // call every draw loop
   update() {
-    if( this.grabbable !== undefined ) {
+    if (this.grabbable !== undefined) {
       this.grabbable.sprite.position.x = this.sprite.position.x + 10;
       this.grabbable.sprite.position.y = this.sprite.position.y + 10;
     }
@@ -129,7 +128,7 @@ class Avatar  {
   drawLabel() {
     textSize(12);
     fill(240);
-    text(this.name, this.sprite.position.x + 20, this.sprite.position.y + 10 );
+    text(this.name, this.sprite.position.x + 20, this.sprite.position.y + 10);
   }
 }
 
@@ -143,7 +142,7 @@ class StaticSprite {
   }
 
   setup() {
-    this.sprite.addImage('static', this.img );
+    this.sprite.addImage('static', this.img);
   }
 }
 
@@ -165,19 +164,19 @@ class NPC extends Avatar {
     this.interactionsArray = [];
     this.interactionIndex = 0;
     this.isActive = false;
-    this.interactWithMeMessage = 'Press SPACE to interact'; 
+    this.interactWithMeMessage = 'Press SPACE to interact';
     this.displayMessage = this.interactWithMeMessage;
     this.img = loadImage(pngPath);
 
     this.promptX = 0;
-    this.promptY = -50; 
+    this.promptY = -50;
     this.keyCodeNum = 32;   // default to SPACE Bar
     this.state = "default";
   }
 
   // Same as StaticSprite class, to support static NPCs
   setup() {
-    this.sprite.addImage('static', this.img );
+    this.sprite.addImage('static', this.img);
   }
 
   // default is space bar, this allows for others
@@ -189,9 +188,9 @@ class NPC extends Avatar {
   setInteractWithMeMessage(interactWithMeMessage) {
     this.interactWithMeMessage = interactWithMeMessage;
   }
-  
+
   // where prompt will be located
-  setPromptLocation(x,y) {
+  setPromptLocation(x, y) {
     this.promptX = x;
     this.promptY = y;
   }
@@ -210,9 +209,9 @@ class NPC extends Avatar {
   displayInteractPrompt(target) {
     // Only displays the interact prompt or current dialogue of the NPC when the player 
     // avatar is overlapping the NPC sprite.
-    if(target.sprite.overlap(this.sprite)) {
+    if (target.sprite.overlap(this.sprite)) {
       this.drawPrompt();
-      if(keyCode === this.keyCodeNum ) {
+      if (keyCode === this.keyCodeNum) {
         // This variable is to ensure that only one NPC is active at a time. Without this,
         // having multiple NPCs on a single screen may cause some bugs in the progression of
         // their individual dialogue.
@@ -221,8 +220,8 @@ class NPC extends Avatar {
         // the idea is to be able to have NPCs that walk around on a set path. If you interact 
         // with an NPC during its cycle, it'll pause. Still thinking about how to continue the 
         // cycle afterwards.
-        this.setSpeed(0,0);
-    
+        this.setSpeed(0, 0);
+
         this.displayMessage = this.interactionsArray[this.interactionIndex];
       }
     }
@@ -230,23 +229,23 @@ class NPC extends Avatar {
       // Go back to interact with me message
       this.displayMessage = this.interactWithMeMessage;
       this.isActive = false;
-    }  
+    }
   }
 
   // MODIFY THIS - drawing of the prompt
   drawPrompt() {
-      fill('white');
-      textSize(14);
-      
-      textAlign(CENTER);
-      
-      text(this.displayMessage, this.sprite.position.x + this.promptX, this.sprite.position.y + this.promptY);
+    fill('white');
+    textSize(14);
+
+    textAlign(CENTER);
+
+    text(this.displayMessage, this.sprite.position.x + this.promptX, this.sprite.position.y + this.promptY);
   }
 
   // Continues the conversation with an NPC through the interaction array.
   continueInteraction() {
-    if(this.isActive) {
-      if(this.interactionIndex < this.interactionsArray.length-1) {
+    if (this.isActive) {
+      if (this.interactionIndex < this.interactionsArray.length - 1) {
         this.interactionIndex++;
       }
     }

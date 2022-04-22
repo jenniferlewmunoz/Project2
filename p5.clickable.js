@@ -83,8 +83,8 @@ function Clickable() {
 		if (this.textScaled) {
 			for (let i = this.height; i > 0; i--) {
 				if (getTextBounds(this.text, this.textFont, i)[0] <= this.width && getTextBounds(this.text, this.textFont, i)[1] <= this.height) {
-					console.log("textbounds: " + getTextBounds(this.text, this.font, i));
-					console.log("boxsize: " + this.width + ", " + this.height);
+					//console.log("textbounds: " + getTextBounds(this.text, this.font, i));
+					//console.log("boxsize: " + this.width + ", " + this.height);
 					this.textSize = i / 2;
 					break;
 				}

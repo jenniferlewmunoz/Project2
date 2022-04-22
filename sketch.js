@@ -21,11 +21,12 @@ var playerAvatar;
 var playerGirl;
 var playerBoy;
 
-// keycods for W-A-S-D
+// keycods
 const W_KEY = 87;
 const S_KEY = 83;
 const D_KEY = 68;
 const A_KEY = 65;
+const X_KEY = 88;
 var speed = 5;
 
 // fonts
@@ -64,37 +65,6 @@ function preload() {
   animated_girl[1] = loadImage('assets/people/female_standing02.png');
   animated_boy[0] = loadImage('assets/people/male_standing02.png');
   animated_boy[1] = loadImage('assets/people/male_standing01.png');
-
-  // Pre load images for grass/trees in the park
-  grass[0] = loadImage('assets/grass01.png');
-  grass[1] = loadImage('assets/grass02.png');
-  grass[2] = loadImage('assets/grass03.png');
-  grass[3] = loadImage('assets/grass04.png');
-
-  trees[0] = loadImage('assets/tree01.png');
-  trees[1] = loadImage('assets/tree02.png');
-  trees[2] = loadImage('assets/tree03.png');
-
-  // Pre load images for cashier in the store
-  cashier[0] = loadImage('assets/people/store_associate01.png');
-  cashier[1] = loadImage('assets/people/store_associate02.png');
-
-  // Pre load images for trash
-  trash.push(new StaticSprite("Bag", 100, 200, 'assets/items/plastic_bag.png'));
-  trash.push(new StaticSprite("Wrapper", 800, 70, 'assets/items/plastic_wrap.png'));
-  trash.push(new StaticSprite("Straw", 400, 600, 'assets/items/straw.png'));
-  trash.push(new StaticSprite("Bottle", 1180, 650, 'assets/items/water_bottle.png'));
-
-  // Pre load images of groceries
-  groceries.push(new StaticSprite("Apple", 755, 382, 'assets/items/apple.png'));
-  groceries.push(new StaticSprite("Banana", 1000, 380, 'assets/items/banana.png'));
-  groceries.push(new StaticSprite("Broccoli", 1125, 383, 'assets/items/broccoli.png'));
-  groceries.push(new StaticSprite("Bacon", 937, 115, 'assets/items/bacon.png'));
-  groceries.push(new StaticSprite("Chicken", 505, 117, 'assets/items/chicken.png'));
-  groceries.push(new StaticSprite("Steak", 1095, 120, 'assets/items/steak.png'));
-  groceries.push(new StaticSprite("Tofu", 188, 117, 'assets/items/tofu.png'));
-  groceries.push(new StaticSprite("Milk", 350, 117, 'assets/items/milk.png'));
-
 }
 
 // Setup the adventure manager
@@ -143,7 +113,7 @@ function setup() {
 
 // Adventure manager handles it all!
 function draw() {
-  //--- TEMPLATE STUFF: Don't change
+
   // draws background rooms and handles movement from one to another
   adventureManager.draw();
 
@@ -167,66 +137,6 @@ function draw() {
         animated_index = 1;
       } else {
         animated_index = 0;
-      }
-      timer.start();
-    }
-  } else if (adventureManager.getStateName() == "Park") {
-
-    // Draw sprites
-    notSplashOrInstruct();
-    for (let i = 0; i < trash.length; i++) {
-      console.log(trash[i].name);
-      drawSprite(trash[i].sprite);
-    }
-
-    // Draw grass
-    let x_grass = [50, 100, 200, 300, 400, 500, 700, 800, 900, 1000, 1100, 1200];
-    let y_grass = [50, 650, 150, 500, 260, 600, 200, 400, 100, 650, 500, 50];
-
-    for (let i = 0; i < x_grass.length; i++) {
-      image(grass[curr_grass], x_grass[i], y_grass[i]);
-    }
-
-    let x_tree = [150, 300, 910, 950];
-    let y_tree = [550, 0, 340, -150];
-
-    let tree = trees[curr_tree];
-    tree.resize(180, 337);
-
-    for (let j = 0; j < x_tree.length; j++) {
-      image(tree, x_tree[j], y_tree[j]);
-    }
-
-    if (timer.expired()) {
-      curr_grass++;
-      curr_tree++;
-      if (curr_grass == 4) {
-        curr_grass = 0;
-      }
-      if (curr_tree == 3) {
-        curr_tree = 0;
-      }
-      timer.start();
-    }
-  } else if (adventureManager.getStateName() == "Store") {
-
-    // Draw Sprites
-    notSplashOrInstruct();
-    for (let i = 0; i < groceries.length; i++) {
-      if (i < 3) {
-        drawSprite(groceries[i].sprite);
-      }
-      console.log(groceries[i].name);
-      drawSprite(groceries[i].sprite);
-    }
-
-    // Draw store associate
-    image(cashier[curr_cashier], 50, 318);
-    if (timer.expired()) {
-      if (curr_cashier == 0) {
-        curr_cashier = 1;
-      } else {
-        curr_cashier = 0;
       }
       timer.start();
     }
@@ -262,20 +172,13 @@ function checkMovement() {
 
   playerAvatar.setSpeed(xSpeed, ySpeed);
 }
-//--
 
-//-- MODIFY THIS: this is an example of how I structured my code. You may
-// want to do it differently
 function mouseReleased() {
   if (adventureManager.getStateName() === "Splash") {
     adventureManager.changeState("Instructions");
   }
 }
 
-
-//-------------- CLICKABLE CODE  ---------------//
-
-//--- TEMPLATE STUFF: Don't change 
 function setupClickables() {
   // All clickables to have same effects
   for (let i = 0; i < clickables.length; i++) {
@@ -292,9 +195,7 @@ function setupClickables() {
     clickables[i].stroke = "#FFFFFF";
   }
 }
-//--
 
-//-- MODIFY THIS:
 // tint when mouse is over
 clickableButtonHover = function () {
   this.color = "#A9A9A9";
@@ -302,28 +203,23 @@ clickableButtonHover = function () {
   this.tint = "#A9A9A9";
 }
 
-//-- MODIFY THIS:
 // color a light gray if off
 clickableButtonOnOutside = function () {
   // backto our gray color
   this.color = "#FFFFFF";
 }
 
-//--- TEMPLATE STUFF: Don't change 
 clickableButtonPressed = function () {
   // these clickables are ones that change your state
   // so they route to the adventure manager to do this
   adventureManager.clickablePressed(this.name);
   if (this.name == "ChooseFemale") {
-    console.log('female pressed')
     playerAvatar = playerGirl;
   } if (this.name == "ChooseMale") {
-    console.log('male pressed')
     playerAvatar = playerBoy;
   }
 
   adventureManager.setPlayerSprite(playerAvatar.sprite);
-
 }
 //
 
@@ -358,24 +254,197 @@ class InstructionsScreen extends PNGRoom {
   }
 }
 
-//-- MODIFY THIS: for your own classes
-// (1) copy this code block below
-// (2) paste after //-- done copy
-// (3) Change name of TemplateScreen to something more descriptive, e.g. "PuzzleRoom"
-// (4) Add that name to the adventureStates.csv file for the classname for that appropriate room
-class TemplateScreen extends PNGRoom {
+/**
+ * Class for the spawn room, the park
+ */
+
+
+var lastTrashGrab1 = -1; // most recent
+var lastTrashGrab2 = -1; // second most recent
+var preventPickupTrash = [false, false, false, false]; // true if you cannot pick up item
+
+class ParkRoom extends PNGRoom {
   preload() {
-    // define class varibles here, load images or anything else
+
+    // Pre load images for grass
+    grass[0] = loadImage('assets/grass01.png');
+    grass[1] = loadImage('assets/grass02.png');
+    grass[2] = loadImage('assets/grass03.png');
+    grass[3] = loadImage('assets/grass04.png');
+
+    // Pre load images for trees
+    trees[0] = loadImage('assets/tree01.png');
+    trees[1] = loadImage('assets/tree02.png');
+    trees[2] = loadImage('assets/tree03.png');
+
+    // Pre load trash grabbables
+    trash.push(new StaticSprite("Bag", 100, 200, 'assets/items/plastic_bag.png'));
+    trash.push(new StaticSprite("Wrapper", 800, 70, 'assets/items/plastic_wrap.png'));
+    trash.push(new StaticSprite("Straw", 400, 600, 'assets/items/straw.png'));
+    trash.push(new StaticSprite("Bottle", 1180, 650, 'assets/items/water_bottle.png'));
+
+    this.isSetup = false;
   }
 
-  // call the PNGRoom superclass's draw function to draw the background image
-  // and draw our code adter this
   draw() {
-    // this calls PNGRoom.draw()
-    super.draw();
+    if (this.isSetup === false) {
+      for (let i = 0; i < trash.length; i++) {
+        trash[i].setup();
+      }
 
-    // Add your code here
+      this.isSetup = true;
+    }
+    super.draw();
+    notSplashOrInstruct();
+    // Draw sprites
+    for (let i = 0; i < trash.length; i++) {
+      drawSprite(trash[i].sprite);
+    }
+
+    // Draw grass
+    let x_grass = [50, 100, 200, 300, 400, 500, 700, 800, 900, 1000, 1100, 1200];
+    let y_grass = [50, 650, 150, 500, 260, 600, 200, 400, 100, 650, 500, 50];
+
+    for (let i = 0; i < x_grass.length; i++) {
+      image(grass[curr_grass], x_grass[i], y_grass[i]);
+    }
+
+    // Draw tree
+    let x_tree = [150, 300, 910, 950];
+    let y_tree = [550, 0, 340, -150];
+
+    let tree = trees[curr_tree];
+    tree.resize(180, 337);
+
+    for (let j = 0; j < x_tree.length; j++) {
+      image(tree, x_tree[j], y_tree[j]);
+    }
+
+    // Change images
+    if (timer.expired()) {
+      curr_grass++;
+      curr_tree++;
+      if (curr_grass == 4) {
+        curr_grass = 0;
+      }
+      if (curr_tree == 3) {
+        curr_tree = 0;
+      }
+      timer.start();
+    }
+
+    // Grabbale Code
+    if (lastTrashGrab1 >= 0 && !playerAvatar.sprite.overlap(trash[lastTrashGrab1].sprite)) {
+      preventPickupTrash[lastTrashGrab1] = false;
+      lastTrashGrab1 = -1;
+    }
+
+    for (i = 0; i < trash.length; i++) {
+
+      if (!preventPickupTrash[i] && playerAvatar.sprite.overlap(trash[i].sprite)) {
+
+        playerAvatar.setGrabbable(trash[i]);
+        preventPickupTrash[i] = true;
+        lastTrashGrab2 = lastTrashGrab1;
+        lastTrashGrab1 = i;
+      }
+    }
+
+    if (lastTrashGrab1 >= 0 && lastTrashGrab2 >= 0 && !playerAvatar.sprite.overlap(trash[lastTrashGrab2].sprite)) {
+      preventPickupTrash[lastTrashGrab2] = false;
+      lastTrashGrab2 = -1;
+    }
+
+    checkItemDrop();
   }
 }
-//-- done copy
 
+
+/**
+ * Class for the grocery store
+ */
+
+var lastGroceryGrab1 = -1; // most recent
+var lastGroceryGrab2 = -1; // second most recent
+var preventPickupGroceries = [false, false, false, false, false, false, false, false]; // true if you cannot pick up item
+
+class StoreRoom extends PNGRoom {
+  preload() {
+    // Pre load images for cashier in the store
+    cashier[0] = loadImage('assets/people/store_associate01.png');
+    cashier[1] = loadImage('assets/people/store_associate02.png');
+
+    // Pre load images of groceries
+    groceries.push(new StaticSprite("Apple", 755, 382, 'assets/items/apple.png'));
+    groceries.push(new StaticSprite("Banana", 1000, 380, 'assets/items/banana.png'));
+    groceries.push(new StaticSprite("Broccoli", 1125, 383, 'assets/items/broccoli.png'));
+    groceries.push(new StaticSprite("Bacon", 937, 115, 'assets/items/bacon.png'));
+    groceries.push(new StaticSprite("Chicken", 505, 117, 'assets/items/chicken.png'));
+    groceries.push(new StaticSprite("Steak", 1095, 120, 'assets/items/steak.png'));
+    groceries.push(new StaticSprite("Tofu", 188, 117, 'assets/items/tofu.png'));
+    groceries.push(new StaticSprite("Milk", 350, 117, 'assets/items/milk.png'));
+
+    this.isSetup = false;
+  }
+
+  draw() {
+    if (this.isSetup === false) {
+      for (let i = 0; i < groceries.length; i++) {
+        groceries[i].setup();
+      }
+
+      this.isSetup = true;
+    }
+
+    super.draw();
+    notSplashOrInstruct();
+
+    // Draw Sprites
+    for (let i = 0; i < groceries.length; i++) {
+      if (i < 3) {
+        drawSprite(groceries[i].sprite);
+      }
+      drawSprite(groceries[i].sprite);
+    }
+
+    // Draw store associate
+    image(cashier[curr_cashier], 50, 318);
+    if (timer.expired()) {
+      if (curr_cashier == 0) {
+        curr_cashier = 1;
+      } else {
+        curr_cashier = 0;
+      }
+      timer.start();
+    }
+    // Grabbale Code
+    if (lastGroceryGrab1 >= 0 && !playerAvatar.sprite.overlap(groceries[lastGroceryGrab1].sprite)) {
+      preventPickupGroceries[lastGroceryGrab1] = false;
+      lastGroceryGrab1 = -1;
+    }
+
+    for (i = 0; i < groceries.length; i++) {
+
+      if (!preventPickupGroceries[i] && playerAvatar.sprite.overlap(groceries[i].sprite)) {
+
+        playerAvatar.setGrabbable(groceries[i]);
+        preventPickupGroceries[i] = true;
+        lastGroceryGrab2 = lastGroceryGrab1;
+        lastGroceryGrab1 = i;
+      }
+    }
+
+    if (lastGroceryGrab1 >= 0 && lastGroceryGrab2 >= 0 && !playerAvatar.sprite.overlap(groceries[lastGroceryGrab2].sprite)) {
+      preventPickupGroceries[lastGroceryGrab2] = false;
+      lastGroceryGrab2 = -1;
+    }
+
+    checkItemDrop();
+  }
+}
+
+function checkItemDrop() {
+  if (keyIsDown(X_KEY) && playerAvatar.grabbable !== undefined) {
+    playerAvatar.clearGrabbable();
+  }
+}
