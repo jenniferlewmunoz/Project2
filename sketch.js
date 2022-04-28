@@ -85,18 +85,6 @@ function setup() {
   playerBoy.addMovingAnimation('assets/people/male_running01.png', 'assets/people/male_running03.png');
   playerBoy.addStandingAnimation('assets/people/male_standing01.png', 'assets/people/male_standing02.png');
 
-  // use this to track movement from toom to room in adventureManager.draw()
-  // adventureManager.setPlayerSprite(playerGirl.sprite);
-
-  // Set up grabbables
-  for (let i = 0; i < trash.length; i++) {
-    trash[i].setup();
-  }
-
-  for (let i = 0; i < groceries.length; i++) {
-    groceries[i].setup();
-  }
-
   // manage turning visibility of buttons on/off based on the state name in the clickableLayout
   adventureManager.setClickableManager(clickablesManager);
 
@@ -263,6 +251,8 @@ var lastTrashGrab1 = -1; // most recent
 var lastTrashGrab2 = -1; // second most recent
 var preventPickupTrash = [false, false, false, false]; // true if you cannot pick up item
 
+var can;
+
 class ParkRoom extends PNGRoom {
   preload() {
 
@@ -292,11 +282,19 @@ class ParkRoom extends PNGRoom {
         trash[i].setup();
       }
 
+      can = new GarbageCan("Can", width / 2, height / 2);
+      can.addMovingAnimation('assets/trash.png', 'assets/trash.png');
+      can.addStandingAnimation('assets/trash.png', 'assets/trash.png');
+
       this.isSetup = true;
     }
+
     super.draw();
     notSplashOrInstruct();
+
     // Draw sprites
+    drawSprite(can.sprite);
+
     for (let i = 0; i < trash.length; i++) {
       drawSprite(trash[i].sprite);
     }
@@ -358,7 +356,6 @@ class ParkRoom extends PNGRoom {
     checkItemDrop();
   }
 }
-
 
 /**
  * Class for the grocery store
@@ -446,5 +443,24 @@ class StoreRoom extends PNGRoom {
 function checkItemDrop() {
   if (keyIsDown(X_KEY) && playerAvatar.grabbable !== undefined) {
     playerAvatar.clearGrabbable();
+  }
+}
+
+class ParkingRoom extends PNGRoom {
+  preload() {
+
+  }
+  draw() {
+    super.draw();
+    notSplashOrInstruct();
+  }
+}
+class HomesRoom extends PNGRoom {
+  preload() {
+
+  }
+  draw() {
+    super.draw();
+    notSplashOrInstruct();
   }
 }

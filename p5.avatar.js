@@ -119,7 +119,7 @@ class Avatar {
   // call every draw loop
   update() {
     if (this.grabbable !== undefined) {
-      this.grabbable.sprite.position.x = this.sprite.position.x + 10;
+      this.grabbable.sprite.position.x = this.sprite.position.x + 50;
       this.grabbable.sprite.position.y = this.sprite.position.y + 10;
     }
   }
@@ -263,3 +263,43 @@ class NPC extends Avatar {
   }
 }
 
+
+class GarbageCan extends Avatar {
+  constructor(name, x, y) {
+    super(name, x, y);
+    this.items = [];
+    this.full = false;
+    this.message = "Pick up trash and throw it all away before the clock runs out!";
+  }
+
+  // Display the current message to instruct player through the game
+  displayMessage() {
+    text(this.message, 10, 10);
+  }
+
+  // Check if player is overlapping the garbage can, return true if grabbable is thrown away
+  addItem(playerAvatar) {
+    if (playerAvatar.sprite.overlap(this.sprite) && playerAvatar.grabbable !== undefined) {
+      let trash = playerAvatar.getGrabbableName;
+      if (trash === "Bag" || trash === "Wrapper" || trash === "Straw" || trash === "Bottle") {
+        this.items.push(trash);
+        text("You threw away " + trash + "! Good job!", 10, 10);
+        playerAvatar.grabbable.sprite.remove();
+        playerAvatar.clearGrabbable();
+        return true;
+      }
+    } else {
+      this.message = "Pick up trash and throw it all away before the clock runs out!";
+      return false;
+    }
+  }
+
+  // Checks if the garbage can is full to end the mini-game
+  // Bag, Wrapper, Straw, Bottle
+  isFull() {
+    if (this.items.length == 4) {
+      this.full = true;
+    }
+    this.message = "Great job, you picked up and threw away all the trash!";
+  }
+}

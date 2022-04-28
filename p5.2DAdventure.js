@@ -531,8 +531,7 @@ class PNGRoom {
     checkForCollision(ps) {
 
         if (ps !== null) {
-            //console.log(this.collisionSX);
-            //console.log(this.collisionSX.length);
+
             for (let i = 0; i < this.collisionSX.length; i++) {
                 if (ps.position.x >= this.collisionSX[i] && ps.position.x <= this.collisionEX[i]) {
                     if (ps.position.y >= this.collisionSY[i] && ps.position.y <= this.collisionEY[i]) {

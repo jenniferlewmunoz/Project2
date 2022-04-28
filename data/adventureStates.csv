@@ -2,12 +2,6 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 0,Splash,PNGRoom,assets/backgrounds/splash.png,
 1,Instructions,InstructionsScreen,assets/backgrounds/intro.png,
 2,Park,ParkRoom,assets/backgrounds/park.png,data/park_cl.csv
-3,Determined,PNGRoom,assets/Determined.png,
-4,Calm,PNGRoom,assets/Calm.png,
-5,Sleepy,PNGRoom,assets/Sleepy.png,
-6,Mad,PNGRoom,assets/Mad.png,
-7,Store,StoreRoom,assets/backgrounds/store.png,data/store_cl.csv
-8,Anxious,PNGRoom,assets/Anxious.png,
-9,Happy,PNGRoom,assets/Happy.png,
-10,Surprised,PNGRoom,Assets/Surprised.png,
-11,Sad,PNGRoom,Assets/Sad.png,
+3,Parking,ParkingRoom,assets/backgrounds/parkingLot.png,
+4,Store,StoreRoom,assets/backgrounds/store.png,data/store_cl.csv
+5,Neighborhood,HomesRoom,assets/backgrounds/neighborhood.png,
