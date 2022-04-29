@@ -146,6 +146,11 @@ class StaticSprite {
   }
 }
 
+// extend static sprite
+// setBounds(minX, maxX) 
+// add a timer when u get to the end ?
+// call update in draw every cycle
+
 /*
   NPC Class - By Luis, modified by Scott
   
@@ -264,9 +269,9 @@ class NPC extends Avatar {
 }
 
 
-class GarbageCan extends Avatar {
-  constructor(name, x, y) {
-    super(name, x, y);
+class GarbageCan extends StaticSprite {
+  constructor(name, x, y, pngPath) {
+    super(name, x, y, pngPath);
     this.items = [];
     this.full = false;
     this.message = "Pick up trash and throw it all away before the clock runs out!";
@@ -274,24 +279,18 @@ class GarbageCan extends Avatar {
 
   // Display the current message to instruct player through the game
   displayMessage() {
-    text(this.message, 10, 10);
+    text(this.message, 50, 50);
   }
 
-  // Check if player is overlapping the garbage can, return true if grabbable is thrown away
-  addItem(playerAvatar) {
-    if (playerAvatar.sprite.overlap(this.sprite) && playerAvatar.grabbable !== undefined) {
-      let trash = playerAvatar.getGrabbableName;
-      if (trash === "Bag" || trash === "Wrapper" || trash === "Straw" || trash === "Bottle") {
-        this.items.push(trash);
-        text("You threw away " + trash + "! Good job!", 10, 10);
-        playerAvatar.grabbable.sprite.remove();
-        playerAvatar.clearGrabbable();
-        return true;
-      }
-    } else {
-      this.message = "Pick up trash and throw it all away before the clock runs out!";
-      return false;
-    }
+  // Check if item has
+  addItem(item) {
+    this.items.push(item);
+    this.message = "You threw away " + item + ", good job!";
+    console.log(this.items);
+  }
+
+  itemsThrownAway() {
+    return this.items;
   }
 
   // Checks if the garbage can is full to end the mini-game
@@ -299,7 +298,7 @@ class GarbageCan extends Avatar {
   isFull() {
     if (this.items.length == 4) {
       this.full = true;
+      this.message = "Great job, you picked up and threw away all the trash!";
     }
-    this.message = "Great job, you picked up and threw away all the trash!";
   }
 }

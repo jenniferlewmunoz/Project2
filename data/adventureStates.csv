@@ -4,4 +4,4 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 2,Park,ParkRoom,assets/backgrounds/park.png,data/park_cl.csv
 3,Parking,ParkingRoom,assets/backgrounds/parkingLot.png,
 4,Store,StoreRoom,assets/backgrounds/store.png,data/store_cl.csv
-5,Neighborhood,HomesRoom,assets/backgrounds/neighborhood.png,
+5,Neighborhood,HomesRoom,assets/backgrounds/neighborhood.png,data/neighborhood_cl.csv

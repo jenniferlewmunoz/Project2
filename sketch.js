@@ -27,6 +27,7 @@ const S_KEY = 83;
 const D_KEY = 68;
 const A_KEY = 65;
 const X_KEY = 88;
+const SPACE_KEY = 32;
 var speed = 5;
 
 // fonts
@@ -52,6 +53,9 @@ var curr_tree = 0;
 var cashier = [];
 var curr_cashier = 0;
 
+// Text box image
+var textbox;
+
 // Allocate Adventure Manager with states table and interaction tables
 function preload() {
   clickablesManager = new ClickableManager('data/clickableLayout.csv');
@@ -65,6 +69,9 @@ function preload() {
   animated_girl[1] = loadImage('assets/people/female_standing02.png');
   animated_boy[0] = loadImage('assets/people/male_standing02.png');
   animated_boy[1] = loadImage('assets/people/male_standing01.png');
+
+  // Pre load image of a text box
+  textbox = loadImage('assets/textbox.png');
 }
 
 // Setup the adventure manager
@@ -108,27 +115,6 @@ function draw() {
   // draw the p5.clickables, in front of the mazes but behind the sprites 
   clickablesManager.draw();
 
-  if (adventureManager.getStateName() == "Instructions") {
-    // Draw animation of girl
-    let img1 = animated_girl[animated_index];
-    img1.resize(160, 300);
-    image(img1, 445, 270);
-
-    // Draw animation of boy
-    let img2 = animated_boy[animated_index];
-    img2.resize(160, 300);
-    image(img2, 695, 270);
-
-    // Change image
-    if (timer.expired()) {
-      if (animated_index == 0) {
-        animated_index = 1;
-      } else {
-        animated_index = 0;
-      }
-      timer.start();
-    }
-  }
 }
 
 function notSplashOrInstruct() {
@@ -209,35 +195,32 @@ clickableButtonPressed = function () {
 
   adventureManager.setPlayerSprite(playerAvatar.sprite);
 }
-//
 
-//-------------- SUBCLASSES / YOUR DRAW CODE CAN GO HERE ---------------//
-
-//-- MODIFY THIS:
-// Change for your own instructions screen
-
-// Instructions screen has a backgrounnd image, loaded from the adventureStates table
-// It is sublcassed from PNGRoom, which means all the loading, unloading and drawing of that
-// class can be used. We call super() to call the super class's function as needed
 class InstructionsScreen extends PNGRoom {
-  // preload is where we define OUR variables
-  // Best not to use constructor() functions for sublcasses of PNGRoom
-  // AdventureManager calls preload() one time, during startup
   preload() {
-    // These are out variables in the InstructionsScreen class
-    this.textBoxWidth = (width / 6) * 4;
-    this.textBoxHeight = (height / 6) * 4;
-
-    // hard-coded, but this could be loaded from a file if we wanted to be more elegant
-    this.instructionsText = "You are navigating through the interior space of your moods. There is no goal to this game, but just a chance to explore various things that might be going on in your head. Use the ARROW keys to navigate your avatar around.";
   }
-
-  // call the PNGRoom superclass's draw function to draw the background image
-  // and draw our instructions on top of this
   draw() {
-
-    // this calls PNGRoom.draw()
     super.draw();
+
+    // Draw animation of girl
+    let img1 = animated_girl[animated_index];
+    img1.resize(160, 300);
+    image(img1, 445, 270);
+
+    // Draw animation of boy
+    let img2 = animated_boy[animated_index];
+    img2.resize(160, 300);
+    image(img2, 695, 270);
+
+    // Change image
+    if (timer.expired()) {
+      if (animated_index == 0) {
+        animated_index = 1;
+      } else {
+        animated_index = 0;
+      }
+      timer.start();
+    }
 
   }
 }
@@ -245,12 +228,10 @@ class InstructionsScreen extends PNGRoom {
 /**
  * Class for the spawn room, the park
  */
-
-
+var mouseClicks = 0;
 var lastTrashGrab1 = -1; // most recent
 var lastTrashGrab2 = -1; // second most recent
 var preventPickupTrash = [false, false, false, false]; // true if you cannot pick up item
-
 var can;
 
 class ParkRoom extends PNGRoom {
@@ -273,6 +254,8 @@ class ParkRoom extends PNGRoom {
     trash.push(new StaticSprite("Straw", 400, 600, 'assets/items/straw.png'));
     trash.push(new StaticSprite("Bottle", 1180, 650, 'assets/items/water_bottle.png'));
 
+    can = new GarbageCan("Can", width / 2, height / 2, 'assets/trash.png');
+
     this.isSetup = false;
   }
 
@@ -282,10 +265,8 @@ class ParkRoom extends PNGRoom {
         trash[i].setup();
       }
 
-      can = new GarbageCan("Can", width / 2, height / 2);
-      can.addMovingAnimation('assets/trash.png', 'assets/trash.png');
-      can.addStandingAnimation('assets/trash.png', 'assets/trash.png');
-
+      can.setup();
+      mouseClicks = 0;
       this.isSetup = true;
     }
 
@@ -331,6 +312,17 @@ class ParkRoom extends PNGRoom {
       timer.start();
     }
 
+    // Trash can code
+    can.isFull();
+    can.displayMessage();
+
+    // Check if the player is overlapping the trash can & add item 
+    if (playerAvatar.sprite.overlap(can.sprite) && playerAvatar.grabbable !== undefined) {
+      can.addItem(playerAvatar.getGrabbableName());
+      playerAvatar.grabbable.sprite.remove();
+      playerAvatar.clearGrabbable();
+    }
+
     // Grabbale Code
     if (lastTrashGrab1 >= 0 && !playerAvatar.sprite.overlap(trash[lastTrashGrab1].sprite)) {
       preventPickupTrash[lastTrashGrab1] = false;
@@ -339,12 +331,16 @@ class ParkRoom extends PNGRoom {
 
     for (i = 0; i < trash.length; i++) {
 
+      // If you can pick it up & if the player is overlapping the item
       if (!preventPickupTrash[i] && playerAvatar.sprite.overlap(trash[i].sprite)) {
 
-        playerAvatar.setGrabbable(trash[i]);
-        preventPickupTrash[i] = true;
-        lastTrashGrab2 = lastTrashGrab1;
-        lastTrashGrab1 = i;
+        // Don't re-pick up removed items
+        if (!can.itemsThrownAway().includes(trash[i].name)) {
+          playerAvatar.setGrabbable(trash[i]);
+          preventPickupTrash[i] = true;
+          lastTrashGrab2 = lastTrashGrab1;
+          lastTrashGrab1 = i;
+        }
       }
     }
 
@@ -354,8 +350,30 @@ class ParkRoom extends PNGRoom {
     }
 
     checkItemDrop();
+
+    // Draw text box intro
+    textFont(din_condensed);
+    textSize(25);
+    if (mouseClicks === 0) {
+      drawTextBox("You", 147, 508, "Hmm, it looks like I landed in a park super littered with plastic.");
+    } else if (mouseClicks === 1) {
+      drawTextBox("You", 147, 508, "Don't these humans know plastics take years to break down & cause green house gasses to leak into their atmosphere?");
+    } else if (mouseClicks === 2) {
+      drawTextBox("You", 147, 508, "I guess I should quickly go around and pick everything up!");
+    }
   }
 }
+
+function mousePressed() {
+  mouseClicks++;
+}
+
+function drawTextBox(name, name_x, name_y, message) {
+  image(textbox, 30, 470);
+  text(name, 147, 508);
+  text(message, 80, 545, 600, 150);
+}
+
 
 /**
  * Class for the grocery store
