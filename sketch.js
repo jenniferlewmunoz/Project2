@@ -1,5 +1,5 @@
 /***********************************************************************************
-  The Hot Clock - A game on climate change
+  The Hot Clock: A 2D Adventure Game on Climate Change
 
   by Jennifer Lew Munoz
   Uses the p5.2DAdventure.js class 
@@ -236,8 +236,10 @@ clickableButtonPressed = function () {
 }
 
 class InstructionsScreen extends PNGRoom {
+
   preload() {
   }
+
   draw() {
     super.draw();
 
@@ -266,6 +268,7 @@ class InstructionsScreen extends PNGRoom {
 /**
  * Class for the spawn room, the park
  */
+
 var mouseClicks = 0;
 var lastTrashGrab1 = -1; // most recent
 var lastTrashGrab2 = -1; // second most recent
@@ -500,7 +503,7 @@ class StoreRoom extends PNGRoom {
 
   draw() {
 
-    // Set up before the draw function
+    // Set up for StoreRoom
     if (this.isSetup === false) {
       for (let i = 0; i < groceries.length; i++) {
         groceries[i].setup();
@@ -647,26 +650,96 @@ class StoreRoom extends PNGRoom {
 }
 
 /**
- * Class that describes what happens in the parking lot room.
+ * Class that describes what happens in the parking lot.
  */
+
+var carTimer;
+
 class ParkingRoom extends PNGRoom {
+
   preload() {
 
-    this.car1 = new StaticSprite('Car1', 200, 200, 'assets/car01.png');
-    this.setup = false;
+    carTimer = new Timer()
 
+    this.blueCar = new StaticSprite('BlueCar', 480, 170, 'assets/car01.png');
+    this.greenCar = new StaticSprite('GreenCar', 630, 550, 'assets/car02.png');
+    this.redCar = new StaticSprite('RedCar', 870, 430, 'assets/car03.png');
+
+    this.setup = false;
   }
+
   draw() {
 
+    // Set up for ParkingRoom
     if (this.setup === false) {
-      this.car1.setup();
+      carTimer = new Timer(5000);
+
+      this.blueCar.setup();
+      this.changeBlueDir = true;
+
+      this.greenCar.setup();
+      this.changeGreenDir = true;
+
+      this.redCar.setup();
+      this.changeRedDir = true;
+
       this.setup = true;
     }
-
     super.draw();
     notSplashOrInstruct();
 
-    //drawSprite(this.car1.sprite);
+    // Draw the cars
+    drawSprite(this.blueCar.sprite);
+    drawSprite(this.greenCar.sprite);
+    drawSprite(this.redCar.sprite);
+
+    // If the greocery game is completed, stop moving the cars
+    if (!groceryGameCompleted) {
+      // Move the blue car
+      if (this.blueCar.sprite.position.x > 720) {
+        this.changeBlueDir = true;
+      } else if (this.blueCar.sprite.position.x <= 480) {
+        this.changeBlueDir = false;
+      }
+      if (this.blueCar.sprite.position.x >= 480 && this.changeBlueDir == false) {
+        this.blueCar.sprite.position.x += 5;
+      } else if (this.changeBlueDir == true) {
+        this.blueCar.sprite.position.x -= 5;
+      }
+
+      // Move the green car
+      if (this.greenCar.sprite.position.x > 900) {
+        this.changeGreenDir = true;
+      } else if (this.greenCar.sprite.position.x <= 630) {
+        this.changeGreenDir = false;
+      }
+      if (this.greenCar.sprite.position.x >= 630 && this.changeGreenDir == false) {
+        this.greenCar.sprite.position.x += 8;
+      } else if (this.changeGreenDir == true) {
+        this.greenCar.sprite.position.x -= 8;
+      }
+
+      // Move the red car
+      if (this.redCar.sprite.position.x > 870) {
+        this.changeRedDir = true;
+      } else if (this.redCar.sprite.position.x <= 600) {
+        this.changeRedDir = false;
+      }
+      if (this.redCar.sprite.position.x >= 600 && this.changeRedDir == false) {
+        this.redCar.sprite.position.x += 2;
+      } else if (this.changeRedDir == true) {
+        this.redCar.sprite.position.x -= 2;
+      }
+
+      // Check if player crashed into car
+      if (playerAvatar.sprite.overlap(this.blueCar.sprite) ||
+        playerAvatar.sprite.overlap(this.redCar.sprite) ||
+        playerAvatar.sprite.overlap(this.greenCar.sprite)) {
+        playerAvatar.sprite.position.x = 100;
+        playerAvatar.sprite.position.y = 200;
+      }
+    }
+
 
     // Use the door to get inside SafeWay
     let x = playerAvatar.sprite.position.x;
@@ -724,10 +797,11 @@ class HomesRoom extends PNGRoom {
   }
   draw() {
 
+    // Set up function for HomesRoom
     if (this.setup === false) {
 
       energyTimer = new Timer(25000); // 25 seconds for game
-      spawnSunTimer = new Timer(1000); // spawn a sun every secondd
+      spawnSunTimer = new Timer(1000); // spawn a sun every second
       energyTimer.start();
       spawnSunTimer.start();
 
@@ -740,13 +814,13 @@ class HomesRoom extends PNGRoom {
 
     // Have player go through story before game beings
     if (mouseClicks === 0) {
-      drawTextBox("You", 147, 508, "It looks like a lot of people on Earth haven't added solar panels to their roofs.");
+      drawTextBox("You", 147, 508, "It looks like a lot of people on Earth have not added solar panels to their roofs.");
     } else if (mouseClicks === 1) {
       drawTextBox("You", 147, 508, "If more people went solar, fossil fuel consumption would be reduced, limiting greenhouse gas emissions.");
     } else if (mouseClicks === 2) {
       drawTextBox("You", 147, 508, "Just one home installing solar can have a measurable effect on the environment.");
     } else if (mouseClicks === 3) {
-      drawTextBox("You", 147, 508, "I'll help them take the first step by gathering up as much solar energy while I'm here.");
+      drawTextBox("You", 147, 508, "I will help them take the first step by gathering up as much solar energy while I am here.");
     } else {
       drawTimer(energyTimer);
       image(energybars[sunshinesCaught], 30, 100);
@@ -768,7 +842,7 @@ class HomesRoom extends PNGRoom {
         image(thick_textbox, 350, 200);
         textAlign(CENTER);
         textSize(20);
-        text("Since not enough people switched to solar energy, green house gasses produced from burning fossil fuels have polluted the atmosphere beyond levels of expectation, and climate change on Earth is now irriversable. Let's head back to the ship to retry!", 400, 255, 500, 200);
+        text("Since not enough people switched to solar energy, green house gasses produced from burning fossil fuels have polluted the atmosphere beyond levels of expectation, and climate change on Earth is now irriversable. Head back to the ship to retry!", 400, 255, 500, 200);
         solarGameLost = true;
 
         // Run the game
@@ -807,9 +881,9 @@ class HomesRoom extends PNGRoom {
         }
       }
 
-
+      // Once game has started, draw game progress messages
       if (solarGameStarted) {
-
+        // Game progess messages
         if (trashGameCompleted && groceryGameCompleted && solarGameCompleted) {
           this.message = "Go back to the fountain to return to ship!";
         } else if (solarGameCompleted) {
@@ -818,6 +892,7 @@ class HomesRoom extends PNGRoom {
           this.message = "You're half way there, keep it up!";
         }
 
+        // Draw text box and game progress message
         image(long_textbox, 393, 625);
         textAlign(CENTER);
         textSize(17);
@@ -832,31 +907,30 @@ class HomesRoom extends PNGRoom {
 }
 
 /**
- * Class that describes what happens in the parking lot room.
+ * Class that describes what happens at the playground.
  */
 class PlayRoom extends PNGRoom {
   preload() {
-
     this.child = new StaticSprite("Child", 800, 300, 'assets/people/child.png');
     this.setup = false;
-
   }
   draw() {
 
+    // Set up for PlayRoom
     if (this.setup === false) {
       this.child.setup();
       this.setup = true;
     }
-
     super.draw();
     notSplashOrInstruct();
 
+    // Draw child sprite that asks for phone games
     drawSprite(this.child.sprite);
-
     if (playerAvatar.sprite.overlap(this.child.sprite)) {
       drawTextBox("Child", 140, 508, "*sniff* Got any games on your phone? *sniff*");
     }
 
+    // Draw the number of tasks completed
     drawTasks();
   }
 }
@@ -873,12 +947,14 @@ class FountainRoom extends PNGRoom {
     this.setup = false;
     this.teleport = loadImage('assets/teleport.png');
   }
+
   draw() {
+
+    // Set up for FountainRoom
     if (this.setup === false) {
       mouseClicks = 0;
       this.setup = true;
     }
-
     super.draw();
     notSplashOrInstruct();
 
@@ -914,6 +990,7 @@ class FountainRoom extends PNGRoom {
       timer.start();
     }
 
+    // Draw beginning instructions, and don't let player move until they click
     if (mouseClicks === 0 && gameCompleted === false) {
       speed = 0;
       image(thick_textbox, 350, 200);
@@ -950,12 +1027,18 @@ class FountainRoom extends PNGRoom {
   }
 }
 
+/**
+ * Check if x key has been pressed to drop item.
+ */
 function checkItemDrop() {
   if (keyIsDown(X_KEY) && playerAvatar.grabbable !== undefined) {
     playerAvatar.clearGrabbable();
   }
 }
 
+/**
+ * Reset timers when mouse has been pressed.
+ */
 function mousePressed() {
   mouseClicks++;
   cashierClicks++;
@@ -974,6 +1057,9 @@ function mousePressed() {
   }
 }
 
+/**
+ * Draw text box with specified name and message.
+ */
 function drawTextBox(name, name_x, name_y, message) {
   textFont(din_condensed);
 
@@ -1000,6 +1086,9 @@ function drawTextBox(name, name_x, name_y, message) {
   }
 }
 
+/**
+ * Draw the remaining time of the specified timer in the top left corner.
+ */
 function drawTimer(timer) {
   textAlign(CENTER);
   image(timer_textbox, 30, 10);
@@ -1010,9 +1099,13 @@ function drawTimer(timer) {
   text("SECONDS", 80, 90);
 }
 
+/**
+ * Draw the progress of tasks completed in the top right corner.
+ */
 function drawTasks() {
-  let tasks = 0;
 
+  // Add one if a game has been completed
+  let tasks = 0;
   if (trashGameCompleted) {
     tasks++;
   }
@@ -1023,10 +1116,7 @@ function drawTasks() {
     tasks++;
   }
 
-  if (tasks === 3) {
-    gameCompleted = true;
-  }
-
+  // Draw textbox
   textAlign(CENTER);
   textFont(din_condensed);
   image(med_textbox, 1110, 10);
@@ -1034,8 +1124,16 @@ function drawTasks() {
   text(tasks + "/3", 1185, 65);
   textSize(13);
   text("TASKS COMPLETE", 1185, 92);
+
+  // If all three tasks have been completed, the game is done.
+  if (tasks === 3) {
+    gameCompleted = true;
+  }
 }
 
+/**
+ * Debugging function that draws avatar & mouse X/Y positions.
+ */
 function drawMousePosition() {
   text("Avatar X: " + playerAvatar.sprite.position.x, 600, 50);
   text("Avatar Y: " + playerAvatar.sprite.position.y, 600, 70);
