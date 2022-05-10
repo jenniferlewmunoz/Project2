@@ -529,8 +529,8 @@ class StoreRoom extends PNGRoom {
       drawSprite(groceries[i].sprite);
     }
 
+    // Make foods that are grabbale bounce up and down
     if (upDownTimer.expired()) {
-
       for (let i = 0; i < groceries.length; i++) {
         if (playerAvatar.getGrabbableName !== groceries[i].name && upDown) {
           groceries[i].sprite.position.y = groceries[i].sprite.position.y + 5;
@@ -652,11 +652,23 @@ class StoreRoom extends PNGRoom {
 class ParkingRoom extends PNGRoom {
   preload() {
 
+    this.car1 = new StaticSprite('Car1', 200, 200, 'assets/car01.png');
+    this.setup = false;
+
   }
   draw() {
+
+    if (this.setup === false) {
+      this.car1.setup();
+      this.setup = true;
+    }
+
     super.draw();
     notSplashOrInstruct();
 
+    //drawSprite(this.car1.sprite);
+
+    // Use the door to get inside SafeWay
     let x = playerAvatar.sprite.position.x;
     let y = playerAvatar.sprite.position.y;
 
@@ -666,6 +678,7 @@ class ParkingRoom extends PNGRoom {
       adventureManager.changeState("Store");
     }
 
+    // Draw remaining tasks
     drawTasks();
   }
 }
@@ -832,7 +845,9 @@ class PlayRoom extends PNGRoom {
 
     if (this.setup === false) {
       this.child.setup();
+      this.setup = true;
     }
+
     super.draw();
     notSplashOrInstruct();
 
@@ -898,14 +913,14 @@ class FountainRoom extends PNGRoom {
       }
       timer.start();
     }
-    //console.log(mouseClicks);
+
     if (mouseClicks === 0 && gameCompleted === false) {
       speed = 0;
       image(thick_textbox, 350, 200);
       textAlign(CENTER);
       textSize(24);
       textFont(din_condensed);
-      text("Complete three tasks to help humans reverse climate change before it is too late! Use your keyboard's arrow keys to move and the keyboard letter X to drop any items you are carrying. Return here once all three tasks are complete!", 400, 220, 500, 200);
+      text("Complete three tasks to help humans reverse climate change before it is too late! Use your keyboard's arrow keys to move and the keyboard letter X to drop any items you are carrying. Return here once all three tasks are complete!", 400, 250, 500, 200);
       textSize(15);
       text("Click anywhere to begin!", 650, 455);
     } else {
