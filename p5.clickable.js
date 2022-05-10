@@ -72,6 +72,7 @@ function Clickable() {
 	this.textSize = 12;		//Size for the text shown
 	this.textFont = "sans-serif";	//Font for the text shown
 	this.textScaled = false;     //Scale the text with the size of the clickable
+	this.visible = true;
 
 	// image options
 	this.image = null; // image object from p5loadimage()
@@ -244,7 +245,9 @@ class ClickableManager {
 	// draw all clickables (visible now in the draw function)
 	draw() {
 		for (let i = 0; i < this.clickableArray.length; i++) {
-			this.clickableArray[i].draw();
+			if (this.clickableArray[i].visible === true) {
+				this.clickableArray[i].draw();
+			}
 		}
 	}
 

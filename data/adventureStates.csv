@@ -1,7 +1,9 @@
 ID,StateName,ClassName,PNGFilename,CollisionFilename
 0,Splash,PNGRoom,assets/backgrounds/splash.png,
 1,Instructions,InstructionsScreen,assets/backgrounds/intro.png,
-2,Park,ParkRoom,assets/backgrounds/park.png,data/park_cl.csv
-3,Parking,ParkingRoom,assets/backgrounds/parkingLot.png,
-4,Store,StoreRoom,assets/backgrounds/store.png,data/store_cl.csv
-5,Neighborhood,HomesRoom,assets/backgrounds/neighborhood.png,data/neighborhood_cl.csv
+2,Park,ParkRoom,assets/backgrounds/park.png,data/csvs/park_cl.csv
+3,Parking,ParkingRoom,assets/backgrounds/parkingLot.png,data/csvs/parkingLot_cl.csv
+4,Store,StoreRoom,assets/backgrounds/store.png,data/csvs/store_cl.csv
+5,Neighborhood,HomesRoom,assets/backgrounds/neighborhood.png,data/csvs/neighborhood_cl.csv
+6,Playground,PlayRoom,assets/backgrounds/playground.png,
+7,Fountain,FountainRoom,assets/backgrounds/fountain.png,data/csvs/fountain_cl.csv

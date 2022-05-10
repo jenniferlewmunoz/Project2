@@ -1,3 +1,6 @@
 ID,Name,State,PNGFilename,Text,x,y,visible
 0,ChooseFemale,Instructions,,Girl,475,600,yes
 1,ChooseMale,Instructions,,Boy,725,600,yes
+2,Retry1,Park,,Retry,600,395,no
+3,Retry2,Neighborhood,,Retry,600,395,no
+4,Retry3,Store,,Retry,600,405,no

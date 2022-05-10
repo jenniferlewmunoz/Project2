@@ -268,25 +268,18 @@ class NPC extends Avatar {
   }
 }
 
-
 class GarbageCan extends StaticSprite {
   constructor(name, x, y, pngPath) {
     super(name, x, y, pngPath);
     this.items = [];
     this.full = false;
-    this.message = "Pick up trash and throw it all away before the clock runs out!";
-  }
-
-  // Display the current message to instruct player through the game
-  displayMessage() {
-    text(this.message, 50, 50);
+    this.message = "Pick up and toss all the trash before the timer runs out!";
   }
 
   // Check if item has
   addItem(item) {
     this.items.push(item);
-    this.message = "You threw away " + item + ", good job!";
-    console.log(this.items);
+    this.message = "Great job! You threw away a " + item + "!";
   }
 
   itemsThrownAway() {
@@ -298,7 +291,79 @@ class GarbageCan extends StaticSprite {
   isFull() {
     if (this.items.length == 4) {
       this.full = true;
-      this.message = "Great job, you picked up and threw away all the trash!";
+      this.message = "The park is all clean now thanks to you!";
+      return true;
+    }
+    return false;
+  }
+
+}
+
+class StoreAssociate extends StaticSprite {
+  constructor(name, x, y, pngPath) {
+    super(name, x, y, pngPath);
+    this.basket = [];
+    this.goodFood = ["Apple", "Banana", "Broccoli", "Tofu"];
+    this.badFood = ["Bacon", "Chicken", "Steak", "Milk"];
+    this.message = "Bring me food items that will help reduce your carbon footprint!";
+  }
+
+  addToBasket(name) {
+
+    if (!this.basket.includes(name)) {
+      this.basket.push(name);
+
+      switch (name) {
+        case "Apple":
+          this.message = "Apples are great! They have a fairly low impaact on the environment, and their trees love to consume CO2 environment. Apples are at risk of extinction due to rising temperatures though!";
+          break;
+        case "Banana":
+          this.message = "Bananas are great! They have a fairly low impact on the environment, and large banana tree plants love to consume CO2 from the atmosphere reducing the potential of climate change.";
+          break;
+        case "Broccoli":
+          this.messaage = "Broccoli is great! Only 2kg of carbon are produced per kg of broccoli consumedd. Broccoli is delicious both raw and cooked. It makes a nutritious snack any time of day and an excellent side to just about any dish.";
+          break;
+        case "Bacon":
+          this.message = "Bacon is bad! While beef production has a larger climate impact than pork, the gases emitted by hog manure lagoons contribute significantly to global warming. Pig waste produces large amounts of nitrous oxide, which has 300x the warming potential of CO2.";
+          break;
+        case "Chicken":
+          this.message = "Chicken is bad! Land for “free roaming chicken” has a high demand and delicate ecosystems are being wiped out for livestock. These chickens release carbon dioxide into the atmosphere that those plants and trees would have absorbed for us.";
+          break;
+        case "Steak":
+          this.message = "Steak is bad! Cows alone are responsible for the majority of livestock’s contribution to climate change, releasing methane through their burps, farts, and manure. Methane is at least 28 times as destructive as carbon dioxide!";
+          break;
+        case "Tofu":
+          this.message = "Tofu is great! It is one of the most versatile plant proteins and comes in a range of soft and firm consistencies. Tofu takes on most any flavor or seasoning it’s given. The greenhouse gas emissions of tofu are 12.5x lower than a beef burger.";
+          break;
+        case "Milk":
+          this.message = "Milk is bad! Cows alone are responsible for the majority of livestocks'contribution to climate change. Any plant based milk emit a lot less greenhouse gasses & even pull CO2 out of the atmosphere since they're plants!";
+          break;
+        default:
+          this.message = "Please bring a me a food item from the store to check!";
+      }
     }
   }
+
+  basketContainsAllGoodFood() {
+    let contains = true;
+    for (let i = 0; i < this.goodFood.length; i++) {
+      if (this.basket.includes(this.goodFood[i])) {
+        contains = true;
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  goodFoodsCollected() {
+    let collected = 0;
+    for (let i = 0; i < this.goodFood.length; i++) {
+      if (this.basket.includes(this.goodFood[i])) {
+        collected++;
+      }
+    }
+    return collected;
+  }
 }
+
