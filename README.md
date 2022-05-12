@@ -16,6 +16,7 @@ The Hot Clock is a social justice 2D adventure game that addresses the issue of 
 - Food waste / livestock emissions
 
 ##Instructions:
+
 Use the arrow keys on your keyboard to move left, right, up, down, and diagonally. If carrying an item such as trash, or a grocery item, you can use the 'X' key on your keyboard to drop the item.
 
 Complete all three tasks that combat the biggest contributors to climate change today in order to win the game and 'show humans how to defeat climate change.'
