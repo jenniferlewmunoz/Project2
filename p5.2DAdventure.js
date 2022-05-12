@@ -4,8 +4,6 @@
 //  for P5.js
 //
 //  Written by Scott Kildall
-//
-//  Very Much in Progress
 *********************************************************************************************************************/
 
 class AdventureManager {
