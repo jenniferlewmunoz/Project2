@@ -1,5 +1,4 @@
-# The Hot Clcok
-## 2D Adventure Game on Climate Change
+# The Hot Clock: 2D Adventure Game on Climate Change
 #### by Jennifer Lew Munoz
 
 ## Links
@@ -25,9 +24,9 @@ Complete all three tasks that combat the biggest contributors to climate change 
 ## sketch.js
 This file describes most of the functionality of the game as it is made up of many classes that describe each “scene” in the game. Some of the classes include:
 
-- FountainRoom: where the player spawns at the beginning of the game & must return at the end to complete the game
-- ParkRoom: player must complete “TrashGame” here which is described in code by them overlapping their avatar coordinates with those of “grabable” trash objects and bringing them to the trash can in the middle (code that describes the trash can can be found in p5.avatar.js)
-- PlayRoom: describes a simple filler room that shows a playground, there is one NPC character who is a child that says something silly
-- HomesRoom: player must complete the “SolarGame” in this room in which one sunlight sprite falls from a random X coordinate at the top of the screen every second until the player is able to collect/overlap 16 of these sunlight sprites to fill the “energy bar” on the left
-- ParkingRoom: player must find their way around cars in the parking lot when they first enter; if they happen to bump into one, the avatar is respawned at the very left of the screen to try again. If the player, has completed the game inside the store, the cars will stop moving so it is not difficult for them to get back to the rest of the game.
-- StoreRoom: The player must collect 4 different climate change friendly foods throughout the store; those that have a bouncing effect are foods that are “grabbable” and can be brought to the cashier for inspection. More source code that defines the cashier can be found in p5.avatar.js. A 60 second timer is run until the player successfully brings all 4 “correct” food items to the cashier.
+- **FountainRoom**: Where the player spawns at the beginning of the game & must return at the end to complete the game.
+- **ParkRoom**: Player must complete “TrashGame” here which is described in code by them overlapping their avatar coordinates with those of “grabable” trash objects and bringing them to the trash can in the middle (code that describes the trash can can be found in p5.avatar.js).
+- **PlayRoom**: Describes a simple filler room that shows a playground, there is one NPC character who is a child that says something silly.
+- **HomesRoom**: Player must complete the “SolarGame” in this room in which one sunlight sprite falls from a random X coordinate at the top of the screen every second until the player is able to collect/overlap 16 of these sunlight sprites to fill the “energy bar” on the left.
+- **ParkingRoom**: Player must find their way around cars in the parking lot when they first enter; if they happen to bump into one, the avatar is respawned at the very left of the screen to try again. If the player, has completed the game inside the store, the cars will stop moving so it is not difficult for them to get back to the rest of the game.
+- **StoreRoom**: The player must collect 4 different climate change friendly foods throughout the store; those that have a bouncing effect are foods that are “grabbable” and can be brought to the cashier for inspection. More source code that defines the cashier can be found in p5.avatar.js. A 60 second timer is run until the player successfully brings all 4 “correct” food items to the cashier.
