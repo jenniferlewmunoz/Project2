@@ -2,7 +2,7 @@
 #### by Jennifer Lew Munoz
 
 ## Links
-Play The Hot Clock: https://xarts.usfca.edu/~jjlewmunoz/TheHotClock/
+Youtube Playthrough: https://youtu.be/eSeY5bQRpZk
 
 Adobe XD: https://xd.adobe.com/view/6f00a53c-f8de-4144-a329-c506ed693ac9-3a53/
 
